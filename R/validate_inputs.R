@@ -30,6 +30,10 @@ validate_inputs <- function(model_options,
                             body_lt = NULL,
                             wing_span_pars = NULL,
                             wing_span = NULL,
+                            macro_avoid_pars = NULL,
+                            macro_avoidance_rate = NULL,
+                            meso_avoid_pars = NULL,
+                            meso_avoidance_rate = NULL,
                             avoid_bsc_pars = NULL,
                             avoid_rt_basic = NULL,
                             avoid_ext_pars = NULL,
@@ -123,6 +127,8 @@ validate_inputs <- function(model_options,
     if(!is.null(flight_speed)) val_constant(flight_speed, 0)
     if(!is.null(body_lt)) val_constant(body_lt, 0)
     if(!is.null(wing_span)) val_constant(wing_span, 0)
+    if(!is.null(macro_avoidance_rate)) val_constant(macro_avoidance_rate, min=-Inf, max=1, check_whole=FALSE) # should be able to be less than 0 to show attraction
+    if(!is.null(meso_avoidance_rate)) val_constant(meso_avoidance_rate, min=-Inf, max=1, check_whole=FALSE) # should be able to be less than 0 to show attraction
     if(!is.null(avoid_rt_basic)) val_constant(avoid_rt_basic, 0, 1)
     if(!is.null(avoid_rt_ext)) val_constant(avoid_rt_ext, 0, 1)
     if(!is.null(noct_activity)) val_constant(noct_activity, 0, 1)
@@ -171,6 +177,8 @@ validate_inputs <- function(model_options,
     if(!is.null(flt_speed_pars)) val_pars_df(flt_speed_pars)
     if(!is.null(body_lt_pars)) val_pars_df(body_lt_pars)
     if(!is.null(wing_span_pars)) val_pars_df(wing_span_pars)
+    if(!is.null(macro_avoid_pars)) val_pars_df(macro_avoid_pars)
+    if(!is.null(meso_avoid_pars)) val_pars_df(meso_avoid_pars)
     if(!is.null(avoid_bsc_pars)) val_pars_df(avoid_bsc_pars)
     if(!is.null(avoid_ext_pars)) val_pars_df(avoid_ext_pars)
     if(!is.null(noct_act_pars)) val_pars_df(noct_act_pars)
