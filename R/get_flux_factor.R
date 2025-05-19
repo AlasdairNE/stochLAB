@@ -60,7 +60,7 @@ get_flux_factor <- function(n_turbines,
                             daynight_hrs,
                             noct_activity,
                             macro_avoidance_rate = 0,
-                            meso_avoidance_rate = 0)
+                            meso_avoidance_rate = 0){
 
   if(length(bird_dens) != nrow(daynight_hrs)){
     stop("Length of vector 'bird_dens' must be identical to number of rows of
