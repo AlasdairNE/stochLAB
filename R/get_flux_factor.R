@@ -60,7 +60,7 @@ get_flux_factor <- function(n_turbines,
                             daynight_hrs,
                             noct_activity,
                             macro_avoidance_rate = 0,
-                            meso_avoidance_rate = 0)
+                            meso_avoidance_rate = 0){
 
   if(length(bird_dens) != nrow(daynight_hrs)){
     stop("Length of vector 'bird_dens' must be identical to number of rows of
@@ -75,6 +75,6 @@ get_flux_factor <- function(n_turbines,
   active_secs <- (daynight_hrs$Day + noct_activity * daynight_hrs$Night) * 3600
 
   flux_no_avoid <- flight_speed * (bird_dens_sqrm/(2*rotor_radius)) * tot_frontal_area * active_secs
-  
+
   flux_no_avoid * (1-macro_avoidance_rate) * (1-meso_avoidance_rate)
 }
