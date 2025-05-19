@@ -17,6 +17,14 @@
 #' @param wing_span_pars A single row data frame with columns `mean` and `sd`,
 #'   the mean and standard deviation of the species wingspan, in metres. Assumed
 #'   to follow a *tnorm-lw0* distribution.
+#' @param macro_avoid_pars A single row data frame with columns `mean` and `sd`,
+#'   the mean and standard deviation of the macro-avoidance rate, i.e. the
+#'   proportion of birds that will avoid flying into a turbine array. Assumed
+#'   to follow a *norm* distribution.
+#' @param meso_avoid_pars A single row data frame with columns `mean` and `sd`,
+#'   the mean and standard deviation of the meso-avoidance rate, i.e. the
+#'   proportion of birds within the array that will avoid entering the rotor-
+#'   swept zone. Assumed to follow a *norm* distribution.
 #' @param avoid_bsc_pars,avoid_ext_pars Single row data frames with columns
 #'   `mean` and `sd`, the mean and standard deviation of the species avoidance
 #'   rate to be used in the basic model (Options 1 and 2) and extended model
@@ -194,6 +202,8 @@ stoch_crm <- function(model_options = c('1', '2', '3', '4'),
                       flt_speed_pars,
                       body_lt_pars,
                       wing_span_pars,
+                      macro_avoid_pars = NULL,
+                      meso_avoid_pars = NULL,
                       avoid_bsc_pars = NULL,
                       avoid_ext_pars = NULL,
                       noct_act_pars,
@@ -293,6 +303,9 @@ stoch_crm <- function(model_options = c('1', '2', '3', '4'),
   out_period <- match.arg(out_period)
   out_format <- match.arg(out_format)
 
+  # Set macro- and meso-avoidance to 0 if unspecified
+  if(is.null(macro_avoid_pars)){macro_avoid_pars <- data.frame("mean" = 0, "sd" = 0)}
+  if(is.null(meso_avoid_pars)){meso_avoid_pars <- data.frame("mean" = 0, "sd" = 0)}
 
   # -- For a subset of the data frames, convert column names to lower-case --- ##
   fun_args <- rlang::fn_fmls_names()
@@ -325,6 +338,8 @@ stoch_crm <- function(model_options = c('1', '2', '3', '4'),
     flt_speed_pars = flt_speed_pars,
     body_lt_pars = body_lt_pars,
     wing_span_pars = wing_span_pars,
+    macro_avoid_pars = macro_avoid_pars,
+    meso_avoid_pars = macro_avoid_pars,
     avoid_bsc_pars = avoid_bsc_pars,
     avoid_ext_pars = avoid_ext_pars,
     noct_act_pars = noct_act_pars,
@@ -465,6 +480,8 @@ stoch_crm <- function(model_options = c('1', '2', '3', '4'),
     flt_speed_pars = flt_speed_pars,
     body_lt_pars = body_lt_pars,
     wing_span_pars = wing_span_pars,
+    macro_avoid_pars = macro_avoid_pars,
+    meso_avoid_pars = meso_avoid_pars,
     avoid_bsc_pars = avoid_bsc_pars,
     avoid_ext_pars = avoid_ext_pars,
     noct_act_pars = noct_act_pars,
@@ -502,6 +519,8 @@ stoch_crm <- function(model_options = c('1', '2', '3', '4'),
         body_lt = param_draws$body_lt[i],
         wing_span = param_draws$wing_span[i],
         flight_type = flight_type,
+        macro_avoidance_rate = param_draws$macro_avoidance_rate[i],
+        meso_avoidance_rate = param_draws$meso_avoidance_rate[i],
         avoid_rt_basic = param_draws$avoid_bsc[i],
         avoid_rt_ext = param_draws$avoid_ext[i],
         noct_activity = param_draws$noct_actv[i],
