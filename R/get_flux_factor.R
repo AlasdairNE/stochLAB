@@ -20,6 +20,12 @@
 #'
 #' @param noct_activity A numeric value. The nocturnal flight activity level,
 #'   expressed as a proportion of daytime activity levels (\eqn{f_night}).
+#' @param macro_avoidance_rate A numeric value within the interval \eqn{[0, 1]}. The
+#'   proportion of birds which will avoid flying into the turbine array.
+#'   Based on empirical observation.
+#' @param meso_avoidance_rate A numeric value within the interval \eqn{[0, 1]}. The
+#'   proportion of the birds within the array that change course to avoid flying
+#'   into the rotor-swept zone.
 #'
 #' @details
 #' The flux factor is used for other model calculations.
@@ -39,14 +45,22 @@
 #'       flight_speed = 13.1,
 #'       bird_dens = c(1.19,0.85,1.05,1.45,1.41,1.45,1.12,1.45,0.93,0.902,1.06,1.23),
 #'       daynight_hrs = Day_Length(52),
-#'       noct_activity = 0.5
+#'       noct_activity = 0.5,
+#'       macro_avoidance_rate = 0.7,
+#'       meso_avoidance_rate = 0.9
 #'       )
 #' @export
 
 
 
-get_flux_factor <- function(n_turbines, rotor_radius, flight_speed,
-                            bird_dens, daynight_hrs, noct_activity){
+get_flux_factor <- function(n_turbines,
+                            rotor_radius,
+                            flight_speed,
+                            bird_dens,
+                            daynight_hrs,
+                            noct_activity,
+                            macro_avoidance_rate = 0,
+                            meso_avoidance_rate = 0)
 
   if(length(bird_dens) != nrow(daynight_hrs)){
     stop("Length of vector 'bird_dens' must be identical to number of rows of
@@ -60,6 +74,7 @@ get_flux_factor <- function(n_turbines, rotor_radius, flight_speed,
 
   active_secs <- (daynight_hrs$Day + noct_activity * daynight_hrs$Night) * 3600
 
-  flight_speed * (bird_dens_sqrm/(2*rotor_radius)) * tot_frontal_area * active_secs
-
+  flux_no_avoid <- flight_speed * (bird_dens_sqrm/(2*rotor_radius)) * tot_frontal_area * active_secs
+  
+  flux_no_avoid * (1-macro_avoidance_rate) * (1-meso_avoidance_rate)
 }
