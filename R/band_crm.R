@@ -14,6 +14,12 @@
 #' @param model_options Character vector, the model options for calculating collision
 #'   risk (see **Details** section below).
 #'
+#' @param macro_avoidance_rate Numeric value. The proportion of birds which avoid
+#'   flying into a turbine array.
+#'
+#' @param meso_avoidance_rate Numeric value. The proportion of birds within the
+#'   array that avoid the rotor-swept zone who otherwise would have flown into it.
+#'
 #' @param avoid_rt_basic,avoid_rt_ext Numeric values. The avoidance rate for,
 #'   respectively, the basic model (i.e. required for model Options 1 and 2) and
 #'   the extended model (i.e. required for Options 3 and 4). Avoidance rate
@@ -156,6 +162,8 @@ band_crm <- function(model_options = c('1', '2', '3', '4'),
                      body_lt,
                      wing_span,
                      flight_type,
+                     macro_avoidance_rate = 0,
+                     meso_avoidance_rate = 0,
                      avoid_rt_basic = NULL,
                      avoid_rt_ext = NULL,
                      noct_activity,
@@ -265,6 +273,8 @@ band_crm <- function(model_options = c('1', '2', '3', '4'),
       flight_speed = flight_speed,
       body_lt = body_lt,
       chord_prof = chord_prof,
+      macro_avoidance_rate = macro_avoidance_rate,
+      meso_avoidance_rate = meso_avoidance_rate,
       avoid_rt_basic = avoid_rt_basic,
       avoid_rt_ext = avoid_rt_ext,
       noct_activity = noct_activity,
@@ -389,7 +399,9 @@ band_crm <- function(model_options = c('1', '2', '3', '4'),
       flight_speed = flight_speed,
       bird_dens = dens_month,
       daynight_hrs = wf_daynight_hrs_month,
-      noct_activity = noct_activity
+      noct_activity = noct_activity,
+      macro_avoidance_rate = macro_avoidance_rate,
+      meso_avoidance_rate = meso_avoidance_rate
     )
 
 
