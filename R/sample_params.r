@@ -58,6 +58,8 @@
 #'     flt_speed_pars = data.frame(mean=7.26,sd=1.5),
 #'     body_lt_pars = data.frame(mean=0.39,sd=0.005),
 #'     wing_span_pars = data.frame(mean=1.08,sd=0.04),
+#'     macro_avoid_pars = data.frame(mean=0.7,sd=0.01),
+#'     meso_avoid_pars = data.frame(mean=0.9,sd=0.005),
 #'     avoid_bsc_pars = data.frame(mean=0.99,sd=0.001),
 #'     avoid_ext_pars = data.frame(mean=0.96,sd=0.002),
 #'     noct_act_pars = data.frame(mean=0.033,sd=0.005),
@@ -87,6 +89,8 @@ sample_parameters <- function(model_options,
                           flt_speed_pars,
                           body_lt_pars,
                           wing_span_pars,
+                          macro_avoid_pars,
+                          meso_avoid_pars,
                           avoid_bsc_pars,
                           avoid_ext_pars,
                           noct_act_pars,
@@ -134,6 +138,24 @@ sample_parameters <- function(model_options,
                  lower = x$lw_trunc)
     })
 
+  
+  # Sample macro and meso avoidance
+  sampled_pars$macro_avoidance_rate <- sampler_hd(dat = macro_avoid_pars$sd,
+                                                   mode = "rtnorm",
+                                                   n = n_iter,
+                                                   mean = macro_avoid_pars$mean,
+                                                   sd = macro_avoid_pars$sd,
+                                                   lower = -Inf,
+                                                   upper = 1)
+
+  sampled_pars$meso_avoidance_rate <- sampler_hd(dat = meso_avoid_pars$sd,
+                                                   mode = "rtnorm",
+                                                   n = n_iter,
+                                                   mean = meso_avoid_pars$mean,
+                                                   sd = meso_avoid_pars$sd,
+                                                   lower = -Inf,
+                                                   upper = 1)
+  
   ## --- Compute samples for hub height (air gap + rotor radius)
   sampled_pars$hub_height <- sampled_pars$air_gap + sampled_pars$rtr_radius
 
@@ -256,7 +278,7 @@ sample_parameters <- function(model_options,
     #         required n_iter sample size. Some steps in the previous solution were
     #         confusing (specially the re-sampling step after the rtnorm sampling)
     #         and, in edge cases (e.g. mean windspeed substantially lower than the
-    #         turbine's operating threshold), one could end up bootstraping from
+    #         turbine's operating threshold), one could end up bootstrapping from
     #         a very small sample. Outputs from new approach will differ from
     #         previous implementation.
     #
