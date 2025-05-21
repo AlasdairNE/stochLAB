@@ -7,6 +7,7 @@
 #'      2: first letter uppercase
 #'      3: first letter of each word uppercase
 #'      4: all uppercase
+library(dplyr)
 
 fix_seabird_names <- function(x, sep = "_", hyphen = "-", case_option = 2){
   # use the separator as the hyphen unless otherwise stated
